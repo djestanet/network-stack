@@ -22,7 +22,7 @@ echo "Capturing BEFORE snapshot..."
 rsync -a --delete /etc/ "$BEFORE/etc/"
 rsync -a --delete /opt/ "$BEFORE/opt/"
 
-echo "Run your install/upgrade now, then press ENTER to continue..."
+echo "Run your install/upgrade now (e.g. ./install.sh), then press ENTER to continue..."
 read -r
 
 echo "Capturing AFTER snapshot..."

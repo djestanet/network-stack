@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-ok() { echo "[OK] $*"; }
+ok() { echo "[OK]   $*"; }
 warn() { echo "[WARN] $*"; }
 fail() { echo "[FAIL] $*"; }
 
-# Pi-hole service
+# Pi-hole FTL
 if systemctl is-active --quiet pihole-FTL; then
   ok "Pi-hole FTL is running"
 else
@@ -33,7 +33,7 @@ else
   fail "Unbound recursion failed"
 fi
 
-# DHCP (Pi-hole via FTL)
+# Pi-hole DHCP
 if grep -q "DHCP_ACTIVE=true" /etc/pihole/setupVars.conf 2>/dev/null; then
   ok "Pi-hole DHCP appears enabled"
 else
@@ -47,7 +47,7 @@ else
   fail "NetAlertX service is NOT running"
 fi
 
-# NetAlertX HTTP status
+# NetAlertX HTTP
 if curl -sSf http://127.0.0.1:20211 >/dev/null 2>&1; then
   ok "NetAlertX web interface reachable"
 else

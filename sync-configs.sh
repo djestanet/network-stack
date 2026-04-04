@@ -15,9 +15,7 @@ sync_if_changed() {
   local repo="$2"
   local label="$3"
 
-  if [ ! -f "$live" ]; then
-    return
-  fi
+  [ -f "$live" ] || return
 
   mkdir -p "$(dirname "$repo")"
 

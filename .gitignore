@@ -1,4 +1,3 @@
-secrets/config.env
-secrets/.env
-
-/etc/dns-stack/config.env
+venv/*
+.env
+# /etc/dns-stack/config.env
