@@ -158,7 +158,7 @@ install_or_upgrade_netalertx() {
     cd /opt/netalertx
   fi
 
-  if [ ! -d "$VENV_DIR" ]; then
+  if [ ! -d "$VENV_DIR/bin" ]; then
     log_message "Creating NetAlertX virtual environment at $VENV_DIR"
     python3 -m venv "$VENV_DIR"
   fi
