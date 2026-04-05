@@ -74,26 +74,40 @@ install_or_upgrade_pihole() {
   if command -v pihole >/dev/null 2>&1; then
     log "Pi-hole detected, upgrading..."
     pihole -up
-  else
-    log "Pi-hole not found, installing..."
-    apt update
-    apt upgrate -y
-    apt install curl
-    curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended
+    return
   fi
 
-  # Force Pi-hole to use Unbound as upstream
+  log "Pi-hole not found, installing..."
+
+  # Pre-seed setupVars.conf to avoid interactive prompts
+  mkdir -p /etc/pihole
+  cat >/etc/pihole/setupVars.conf <<EOF
+PIHOLE_INTERFACE=eth0
+IPV4_ADDRESS=$(hostname -I | awk '{print $1}')
+IPV6_ADDRESS=
+PIHOLE_DNS_1=127.0.0.1#5335
+DNSSEC=false
+QUERY_LOGGING=true
+INSTALL_WEB_SERVER=true
+INSTALL_WEB_INTERFACE=true
+LIGHTTPD_ENABLED=true
+EOF
+
+  apt update
+  apt upgrade -y
+  apt install -y curl
+
+  curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended
+
+  # Ensure Unbound is the only upstream and DNSSEC is off (Unbound handles it)
   if grep -q "^PIHOLE_DNS_" /etc/pihole/setupVars.conf; then
     sed -i 's/^PIHOLE_DNS_/#PIHOLE_DNS_/g' /etc/pihole/setupVars.conf
   fi
-
   if ! grep -q "^PIHOLE_DNS_1=" /etc/pihole/setupVars.conf; then
     echo "PIHOLE_DNS_1=127.0.0.1#5335" >> /etc/pihole/setupVars.conf
   else
     sed -i 's/^PIHOLE_DNS_1=.*/PIHOLE_DNS_1=127.0.0.1#5335/' /etc/pihole/setupVars.conf
   fi
-
-  # Disable Pi-hole DNSSEC (Unbound handles it)
   if grep -q "^DNSSEC=" /etc/pihole/setupVars.conf; then
     sed -i 's/^DNSSEC=.*/DNSSEC=false/' /etc/pihole/setupVars.conf
   else
