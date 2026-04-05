@@ -153,7 +153,7 @@ install_or_upgrade_netalertx() {
   apt update
   apt upgrade -y curl
 
-  if [ -d /opt/netalertx ]; then
+  if [ -d /app ]; then
     log_info "NetAlertX detected, upgrading..."
     # cd /opt/netalertx
     # git pull
