@@ -145,7 +145,6 @@ sync_pihole_configs() {
 # ---------- NetAlertX (venv) ----------
 install_or_upgrade_netalertx() {
 
-
   # curl -o install.debian12.sh 
   #   https://raw.githubusercontent.com/jokob-sk/NetAlertX/main/install/debian12/install.debian12.sh && 
   #   sudo chmod +x install.debian12.sh && 
@@ -153,7 +152,8 @@ install_or_upgrade_netalertx() {
   apt update
   apt upgrade -y curl
 
-  if [ -d /app ]; then
+  # if [ -d /app ]; then
+  if [ -d "/app" ]; then
     log_info "NetAlertX detected, upgrading..."
     # cd /opt/netalertx
     # git pull
