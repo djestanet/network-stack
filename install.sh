@@ -13,19 +13,37 @@ timestamp() {
   date '+%Y-%m-%d %H:%M:%S'
 }
 
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color
+
+# Function to print colored messages
+log_info() { echo -e "${BLUE}ℹ${NC} $1"; }
+log_message() { echo -e "${MAGENTA}ℹ${NC} $1"; }
+log_success() { echo -e "${GREEN}✓${NC} $1"; }
+log_warn() { echo -e "${YELLOW}⚠${NC} $1"; }
+log_error() { echo -e "${RED}✗${NC} $1"; }
+log_step() { echo -e "${CYAN}▸${NC} $1"; }
+
 log() {
-  echo "[$(timestamp)] $*"
+  # echo "${RED}[$(timestamp)] $*${NC}"
+  log_info "[$(timestamp)] $*"
 }
 
 # ---------- Unbound ----------
 
 install_or_upgrade_unbound() {
   if dpkg -s unbound >/dev/null 2>&1; then
-    log "Unbound detected, upgrading..."
+    log_info "Unbound detected, upgrading..."
     apt update
     apt install --only-upgrade -y unbound
   else
-    log "Unbound not found, installing..."
+    log_warn "Unbound not found, installing..."
     apt update
     apt install -y unbound
   fi
@@ -72,12 +90,12 @@ sync_unbound_configs() {
 
 install_or_upgrade_pihole() {
   if command -v pihole >/dev/null 2>&1; then
-    log "Pi-hole detected, upgrading..."
+    log_info "Pi-hole detected, upgrading..."
     pihole -up
     return
   fi
 
-  log "Pi-hole not found, installing..."
+  log_warn "Pi-hole not found, installing..."
 
   # Pre-seed setupVars.conf to avoid interactive prompts
   mkdir -p /etc/pihole
@@ -131,17 +149,17 @@ install_or_upgrade_netalertx() {
   apt install -y git python3 python3-venv nmap arp-scan sqlite3 curl
 
   if [ -d /opt/netalertx ]; then
-    log "NetAlertX detected, upgrading..."
+    log_info "NetAlertX detected, upgrading..."
     cd /opt/netalertx
     git pull
   else
-    log "NetAlertX not found, installing..."
+    log_warn "NetAlertX not found, installing..."
     git clone https://github.com/jokob-sk/NetAlertX.git /opt/netalertx
     cd /opt/netalertx
   fi
 
   if [ ! -d "$VENV_DIR" ]; then
-    log "Creating NetAlertX virtual environment at $VENV_DIR"
+    log_message "Creating NetAlertX virtual environment at $VENV_DIR"
     python3 -m venv "$VENV_DIR"
   fi
 
@@ -194,4 +212,4 @@ sync_unbound_configs
 sync_pihole_configs
 sync_netalertx_configs
 
-log "Install/upgrade complete."
+log_message "Install/upgrade complete."
