@@ -143,8 +143,34 @@ sync_pihole_configs() {
 }
 
 # ---------- NetAlertX (venv) ----------
-
 install_or_upgrade_netalertx() {
+
+
+  # curl -o install.debian12.sh 
+  #   https://raw.githubusercontent.com/jokob-sk/NetAlertX/main/install/debian12/install.debian12.sh && 
+  #   sudo chmod +x install.debian12.sh && 
+  #   sudo ./install.debian12.sh
+  apt update
+  apt upgrade -y curl
+
+  if [ -d /opt/netalertx ]; then
+    log_info "NetAlertX detected, upgrading..."
+    # cd /opt/netalertx
+    # git pull
+  else
+    log_warn "NetAlertX not found, installing..."
+    # git clone https://github.com/jokob-sk/NetAlertX.git /opt/netalertx
+    # cd /opt/netalertx
+
+    curl -o \
+      install.debian12.sh \
+      https://raw.githubusercontent.com/jokob-sk/NetAlertX/main/install/debian12/install.debian12.sh && \
+      sudo chmod +x install.debian12.sh && \
+      sudo ./install.debian12.sh
+
+  fi  
+}
+install_or_upgrade_netalertxv1() {
   apt update
   apt install -y git python3 python3-venv nmap arp-scan sqlite3 curl
 
