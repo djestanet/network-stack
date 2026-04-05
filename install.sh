@@ -76,6 +76,9 @@ install_or_upgrade_pihole() {
     pihole -up
   else
     log "Pi-hole not found, installing..."
+    apt update
+    apt upgrate -y
+    apt install curl
     curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended
   fi
 
