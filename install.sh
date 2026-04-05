@@ -23,12 +23,12 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Function to print colored messages
-log_info() { echo -e "${BLUE}ℹ${NC} $1"; }
-log_message() { echo -e "${MAGENTA}ℹ${NC} $1"; }
-log_success() { echo -e "${GREEN}✓${NC} $1"; }
-log_warn() { echo -e "${YELLOW}⚠${NC} $1"; }
-log_error() { echo -e "${RED}✗${NC} $1"; }
-log_step() { echo -e "${CYAN}▸${NC} $1"; }
+log_info() { echo -e "[$(timestamp)] ${BLUE}ℹ $1${NC}"; }
+log_message() { echo -e "[$(timestamp)] ${MAGENTA}ℹ $1${NC}"; }
+log_success() { echo -e "[$(timestamp)] ${GREEN}✓ $1${NC}"; }
+log_warn() { echo -e "[$(timestamp)] ${YELLOW}⚠ $1${NC}"; }
+log_error() { echo -e "[$(timestamp)] ${RED}✗ $1${NC}"; }
+log_step() { echo -e "[$(timestamp)] ${CYAN}▸ $1${NC}"; }
 
 log() {
   # echo "${RED}[$(timestamp)] $*${NC}"
