@@ -204,12 +204,12 @@ sync_netalertx_configs() {
 
 # ---------- Run in correct order ----------
 
-install_or_upgrade_unbound
-install_or_upgrade_pihole
+# install_or_upgrade_unbound
+# install_or_upgrade_pihole
 install_or_upgrade_netalertx
 
-sync_unbound_configs
-sync_pihole_configs
+# sync_unbound_configs
+# sync_pihole_configs
 sync_netalertx_configs
 
 log_message "Install/upgrade complete."
